@@ -42,7 +42,7 @@ export default function App() {
   useEffect(() => {
     if (session) {
       setIsCheckingAdmin(true); 
-      fetch('http://localhost:5000/session', {
+      fetch('https://sricity-backend.vercel.app/session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

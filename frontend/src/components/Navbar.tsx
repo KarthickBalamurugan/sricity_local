@@ -41,7 +41,7 @@ const Navbar = ({ session, isSignedIn, isAdmin }: { session: any, isSignedIn: bo
               className="relative group py-2"
             >
               <span className="text-slate-300 text-sm font-medium tracking-wide group-hover:text-white transition-colors">
-                Create Room
+                Create a room
               </span>
               <span className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-teal-500/0 via-teal-500/70 to-teal-500/0 
                             scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />

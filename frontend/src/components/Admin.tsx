@@ -21,7 +21,7 @@ const Admin = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('http://localhost:5000/users');
+      const response = await fetch('https://sricity-backend.vercel.app/users');
       const data = await response.json();
       setUsers(data);
       setLoading(false);
@@ -40,7 +40,7 @@ const Admin = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/users/${email}`, {
+      const response = await fetch(`https://sricity-backend.vercel.app/users/${email}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
