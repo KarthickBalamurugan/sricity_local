@@ -37,7 +37,7 @@ const Navbar = ({ session, isSignedIn, isAdmin }: { session: any, isSignedIn: bo
               </a>
             )}
             <a
-              href="/room"
+              href="/create-room"
               className="relative group py-2"
             >
               <span className="text-slate-300 text-sm font-medium tracking-wide group-hover:text-white transition-colors">

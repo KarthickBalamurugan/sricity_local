@@ -5,6 +5,7 @@ import Hero from './components/Hero';
 import { useEffect, useState } from "react";
 import Admin from "./components/Admin";
 import Room from "./components/Room";
+import AudioRoom from "./components/AudioRoom";
 
 const ProtectedAdminRoute = ({ isAdmin, isLoading }: { isAdmin: boolean; isLoading: boolean }) => {
   const location = useLocation();
@@ -20,7 +21,7 @@ const ProtectedAdminRoute = ({ isAdmin, isLoading }: { isAdmin: boolean; isLoadi
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ProtectedRoomRoute = ({ loginStatus, isLoading,session ,roomId,setRoomId}: { loginStatus: string; isLoading: boolean,session:any,roomId:any,setRoomId:any }) => {
+const ProtectedCreateRoomRoute = ({ loginStatus, isLoading,session ,roomId,setRoomId}: { loginStatus: string; isLoading: boolean,session:any,roomId:any,setRoomId:any }) => {
   const location = useLocation();
   
   if (isLoading) {
@@ -31,6 +32,21 @@ const ProtectedRoomRoute = ({ loginStatus, isLoading,session ,roomId,setRoomId}:
     return <Navigate to="/" state={{ from: location }} replace />;
   }
   return <Room session={session} roomId={roomId} setRoomId={setRoomId} />;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ProtectedRoomRoute = ({ loginStatus, isLoading ,roomId}: { loginStatus: string; isLoading: boolean,session:any,roomId:any }) => {
+  const location = useLocation();
+  
+  if (isLoading) {
+    return <div>Checking permissions...</div>;
+  }
+  
+  if (loginStatus !== 'approved' || roomId==null) {
+    return <Navigate to="/" state={{ from: location }} replace />;
+  }
+  
+  return <AudioRoom roomId={roomId} />;
 };
 
 export default function App() {
@@ -102,7 +118,11 @@ export default function App() {
             />
             <Route 
               path="/create-room" 
-              element={<ProtectedRoomRoute loginStatus={loginStatus} isLoading={isCheckingAdmin} session={session} roomId={roomId} setRoomId={setRoomId}/>}
+              element={<ProtectedCreateRoomRoute loginStatus={loginStatus} isLoading={isCheckingAdmin} session={session} roomId={roomId} setRoomId={setRoomId}/>}
+            />
+            <Route
+            path="/room"
+            element={<ProtectedRoomRoute loginStatus={loginStatus} isLoading={isCheckingAdmin} session={session} roomId={roomId} />}
             />
           </Routes>
         )}
