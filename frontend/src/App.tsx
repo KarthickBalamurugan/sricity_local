@@ -45,7 +45,7 @@ const ProtectedRoomRoute = ({ loginStatus, isLoading ,roomId}: { loginStatus: st
   if (loginStatus !== 'approved' || roomId==null) {
     return <Navigate to="/" state={{ from: location }} replace />;
   }
-  
+
   return <AudioRoom roomId={roomId} />;
 };
 
@@ -54,7 +54,7 @@ export default function App() {
   const [loginStatus, setLoginStatus] = useState<'loading' | 'approved' | 'waitlist'>('loading');
   const [isAdmin, setIsAdmin] = useState(false);
   const [isCheckingAdmin, setIsCheckingAdmin] = useState(true); // New loading state
-  const [roomId, setRoomId] = useState<string | null>(null);
+  const [roomId, setRoomId] = useState<string | null>("null");
   useEffect(() => {
     if (session) {
       setIsCheckingAdmin(true); 
