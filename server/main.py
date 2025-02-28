@@ -95,6 +95,7 @@ def create_room():
         "roomID": room_id,
         "roomName": room_name,
         "email": email,
+        "participants":[f"{email}"],
         "qrCode": qr_base64  # Optional: Store QR in DB if needed
     }
     rooms_collection.insert_one(room_data)
@@ -126,6 +127,28 @@ def update_user(email):
     if result.modified_count:
         return jsonify({'message': 'User updated successfully'})
     return jsonify({'error': 'User not found'}), 404
+
+@app.route('/join-room', methods=['POST'])
+def addToRoom():
+    data = request.get_json()
+    
+    # Find the room with the given roomID
+    room = rooms_collection.find_one({"roomID": data["roomId"]})
+
+    if not room:
+        return jsonify({"error": "Room not found","state":"0"})  # Return 404 if roomID doesn't exist
+
+    if data["session"] not in room.get("participants", []):
+        # Add session to participants
+        rooms_collection.update_one(
+            {"roomID": data["roomId"]},
+            {"$push": {"participants": data["session"]}}
+        )
+        return jsonify({"message": "Added to room","state":"1"})
+    
+    return jsonify({"message": "Already in room","state":"2"})
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

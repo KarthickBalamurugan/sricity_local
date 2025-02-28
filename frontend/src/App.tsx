@@ -20,7 +20,7 @@ const ProtectedAdminRoute = ({ isAdmin, isLoading }: { isAdmin: boolean; isLoadi
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ProtectedRoomRoute = ({ loginStatus, isLoading,session }: { loginStatus: string; isLoading: boolean,session:any }) => {
+const ProtectedRoomRoute = ({ loginStatus, isLoading,session ,roomId,setRoomId}: { loginStatus: string; isLoading: boolean,session:any,roomId:any,setRoomId:any }) => {
   const location = useLocation();
   
   if (isLoading) {
@@ -30,7 +30,7 @@ const ProtectedRoomRoute = ({ loginStatus, isLoading,session }: { loginStatus: s
   if (loginStatus !== 'approved') {
     return <Navigate to="/" state={{ from: location }} replace />;
   }
-  return <Room session={session} />;
+  return <Room session={session} roomId={roomId} setRoomId={setRoomId} />;
 };
 
 export default function App() {
@@ -38,11 +38,11 @@ export default function App() {
   const [loginStatus, setLoginStatus] = useState<'loading' | 'approved' | 'waitlist'>('loading');
   const [isAdmin, setIsAdmin] = useState(false);
   const [isCheckingAdmin, setIsCheckingAdmin] = useState(true); // New loading state
-
+  const [roomId, setRoomId] = useState<string | null>(null);
   useEffect(() => {
     if (session) {
       setIsCheckingAdmin(true); 
-      fetch('https://sricity-backend.vercel.app/session', {
+      fetch('http://127.0.0.1:5000/session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -101,8 +101,8 @@ export default function App() {
               element={<ProtectedAdminRoute isAdmin={isAdmin} isLoading={isCheckingAdmin} />}
             />
             <Route 
-              path="/room" 
-              element={<ProtectedRoomRoute loginStatus={loginStatus} isLoading={isCheckingAdmin} session={session}/>}
+              path="/create-room" 
+              element={<ProtectedRoomRoute loginStatus={loginStatus} isLoading={isCheckingAdmin} session={session} roomId={roomId} setRoomId={setRoomId}/>}
             />
           </Routes>
         )}
