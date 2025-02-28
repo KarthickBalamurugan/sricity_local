@@ -54,7 +54,8 @@ export default function App() {
   const [loginStatus, setLoginStatus] = useState<'loading' | 'approved' | 'waitlist'>('loading');
   const [isAdmin, setIsAdmin] = useState(false);
   const [isCheckingAdmin, setIsCheckingAdmin] = useState(true); // New loading state
-  const [roomId, setRoomId] = useState<string | null>("null");
+  const [roomId, setRoomId] = useState<string | null>("null"); //change it to null
+  
   useEffect(() => {
     if (session) {
       setIsCheckingAdmin(true); 
