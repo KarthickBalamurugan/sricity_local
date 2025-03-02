@@ -16,6 +16,8 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 import tempfile
+import torch
+from transformers import BertTokenizer, BertForSequenceClassification
 
 # ===== Firebase Admin SDK =====
 import firebase_admin
@@ -25,7 +27,12 @@ from firebase_admin import credentials, storage
 load_dotenv()
 ASSEMBLYAI_API_KEY = os.getenv("ASSEMBLYAI_API_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+WHISPER_API_URL = "https://api.whisper.ai/transcribe"
 
+# Load Clinical BERT model and tokenizer
+CLINICAL_BERT_MODEL_NAME = "emilyalsentzer/Bio_ClinicalBERT"
+tokenizer = BertTokenizer.from_pretrained(CLINICAL_BERT_MODEL_NAME)
+model = BertForSequenceClassification.from_pretrained(CLINICAL_BERT_MODEL_NAME)
 if not ASSEMBLYAI_API_KEY:
     raise ValueError("AssemblyAI API key not found in environment variables")
 if not GEMINI_API_KEY:
@@ -379,6 +386,39 @@ def get_rooms():
     for room in rooms:
         room['_id'] = str(room['_id'])
     return jsonify(rooms)
+@app.route('/transcribe', methods=['POST'])
+def transcribe_audio():
+    if 'file' not in request.files:
+        return jsonify({"error": "No audio file provided"}), 400
+
+    audio_file = request.files['file']
+
+
+    response = requests.post(WHISPER_API_URL, files={'file': audio_file})
+
+    if response.status_code != 200:
+        return jsonify({"error": "Failed to transcribe audio"}), 500
+
+    transcript = response.json().get('transcript', '')
+
+    return jsonify({"transcript": transcript})
+@app.route('/analyze', methods=['POST'])
+def analyze_transcript():
+    data = request.json
+
+    if 'transcript' not in data:
+        return jsonify({"error": "No transcript provided"}), 400
+
+    transcript = data['transcript']
+
+    inputs = tokenizer(transcript, return_tensors="pt", truncation=True, padding=True)
+
+    with torch.no_grad():
+        outputs = model(**inputs)
+
+    predicted_class = torch.argmax(logits, dim=1).item()
+
+    return jsonify({"predicted_class": predicted_class})
 
 if __name__ == '__main__':
     app.run(debug=True)
