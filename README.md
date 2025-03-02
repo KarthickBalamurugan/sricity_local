@@ -23,10 +23,12 @@ MedScript is an innovative solution designed to revolutionize medical documentat
   - Users can **record surgery videos**.
   - AI detects **specific surgical actions** and integrates them into reports.
 
-## Demo Video
-Watch the full demo of MedScript here:
 
-[![MedScript Demo](https://img.youtube.com/vi/tx6mPJwum8g/0.jpg)](https://youtu.be/tx6mPJwum8g)
+# **Demo Video**  
+📽️ **Watch the full demo of MedScript here:**  
+
+[![MedScript Demo – Click to Watch](https://img.youtube.com/vi/tx6mPJwum8g/maxresdefault.jpg)](https://youtu.be/tx6mPJwum8g)  
+
 
 ## How It Works
 1. **Create a Room:** Doctors set up a virtual operation theater.
@@ -42,5 +44,5 @@ Watch the full demo of MedScript here:
 
 
 ## Contact
-For queries or collaborations, reach out to Team NAMBA THAN.
+For queries or collaborations, reach out to Team NAMMA THAN.
 
